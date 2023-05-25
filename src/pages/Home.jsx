@@ -9,7 +9,7 @@ import { CommentsBlock } from '../components/CommentsBlock';
 
 export const Home = () => {
   useEffect(()=>{
-
+axios.get('/posts')
   },[])
   return (
     <>
