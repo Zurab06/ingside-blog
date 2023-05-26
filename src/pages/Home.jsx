@@ -6,10 +6,15 @@ import axios from '../axios.js';
 import { Post } from '../components/Post';
 import { TagsBlock } from '../components/TagsBlock';
 import { CommentsBlock } from '../components/CommentsBlock';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPosts } from '../redux/slices/posts.js';
 
 export const Home = () => {
+  const dispatch = useDispatch()
+  const {posts, tags} = useSelector(state => state.posts)
+  console.log(posts);
   useEffect(()=>{
-axios.get('/posts')
+dispatch(fetchPosts())
   },[])
   return (
     <>
