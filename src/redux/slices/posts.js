@@ -7,6 +7,11 @@ export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
 
 })
 
+export const fetchTags = createAsyncThunk('posts/tags/', async () => {
+    const { data } = await axios.get('/tags')
+    return data
+})
+
 const initialState = {
     posts: {
         items: [],
@@ -18,7 +23,7 @@ const initialState = {
     }
 }
 
-const postsSlice = createSlice ({
+const postsSlice = createSlice({
     name: 'posts',
     initialState,
     reducers: {},

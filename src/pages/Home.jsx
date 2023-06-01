@@ -6,7 +6,7 @@ import { Post } from '../components/Post';
 import { TagsBlock } from '../components/TagsBlock';
 import { CommentsBlock } from '../components/CommentsBlock';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchPosts } from '../redux/slices/posts.js';
+import { fetchPosts, fetchTags } from '../redux/slices/posts.js';
 
 export const Home = () => {
 
@@ -18,6 +18,7 @@ export const Home = () => {
   console.log(posts);
   useEffect(()=>{
 dispatch(fetchPosts())
+dispatch(fetchTags())
   },[dispatch])
   return (
     <>
@@ -32,15 +33,14 @@ dispatch(fetchPosts())
             <Post
               id={obj._id}
               title={obj.title}
-              imageUrl="https://res.cloudinary.com/practicaldev/image/fetch/s--UnAfrEG8--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/icohm5g0axh9wjmu4oc3.png"
-              user={obj.user}
-              createdAt={'12 июня 2022 г.'}
-              viewsCount={150}
+              imageUrl={obj.imageUrl}
+              createdAt={obj.createdAt}
+              viewsCount={obj.viewsCount}
               commentsCount={3}
-              tags={['react', 'fun', 'typescript']}
+              tags={obj.tags}
               isEditable
             />
-            
+
           ))}
         </Grid>
         <Grid xs={4} item>
@@ -50,7 +50,7 @@ dispatch(fetchPosts())
               {
                 user: {
                   fullName: 'Вася Пупкин',
-                  avatarUrl: 'https://mui.com/static/images/avatar/1.jpg',
+                  avatarUrl: 'https://mui.com/statc/images/avatar/1.jpg',
                 },
                 text: 'Это тестовый комментарий',
               },
