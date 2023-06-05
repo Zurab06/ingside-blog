@@ -15,6 +15,7 @@ export const Home = () => {
 
   const {posts, tags} = useSelector(state => state.posts)
   const isPostsLoading = posts.status === 'loading'
+  const isTagsLoading = tags.status === 'loading'
   console.log(posts);
   useEffect(()=>{
 dispatch(fetchPosts())
@@ -31,7 +32,7 @@ dispatch(fetchTags())
           {( isPostsLoading ? [...Array(5)] : posts.items).map((obj,index) => 
           isPostsLoading ?  (<Post key={index} isLoading={true} />) : (
             <Post
-              id={obj._id}
+              _id={obj._id}
               title={obj.title}
               imageUrl={obj.imageUrl}
               createdAt={obj.createdAt}
@@ -44,7 +45,7 @@ dispatch(fetchTags())
           ))}
         </Grid>
         <Grid xs={4} item>
-          <TagsBlock items={['react', 'typescript', 'заметки']} isLoading={false} />
+          <TagsBlock items={tags.items} isLoading={isTagsLoading} />
           <CommentsBlock
             items={[
               {
