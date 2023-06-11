@@ -24,6 +24,7 @@ const onSubmit = (values)=>{
 }
 if(isAuth){
   return <Navigate to='/'/>
+  
 }
   return (
     <Paper classes={{ root: styles.root }}>
