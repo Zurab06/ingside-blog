@@ -6,12 +6,15 @@ import SimpleMDE from "react-simplemde-editor";
 
 import "easymde/dist/easymde.min.css";
 import styles from "./AddPost.module.scss";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate, Navigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { isAuth } from "../../redux/slices/auth";
 import axios from "../../axios";
 
 export const AddPost = () => {
+  const {id} = useParams()
+  const isEditing = Boolean(id)
+  console.log(id);
   const inputRef = useRef(null);
   const authIs = useSelector(isAuth);
   const [text, setText] = React.useState("");
@@ -52,9 +55,9 @@ export const AddPost = () => {
         text,
         tags,
       };
-      const { data } = await axios.post("/posts", fields);
-      const id = data._id;
-      navigate(`/posts/${id}`);
+      const { data } =  isEditing ? await axios.patch(`/posts/${id}`, fields) : await axios.post("/posts", fields);
+      const _id = isEditing ? id :  data._id;
+      navigate(`/posts/${_id}`);
     } catch (error) {
       console.log(error);
       alert("ошибка при загрузке поста");
@@ -62,8 +65,19 @@ export const AddPost = () => {
   };
 
   useEffect(() => {
-    axios.patch(``);
-  });
+    if(id){
+      axios.get(`posts/${id}`).then(({data})=>{
+        setImageUrl(data.imageUrl)
+        setTags(data.tags.join(','))
+        setText(data.text)
+        setTitle(data.title)
+      }).catch((error)=>{
+        console.log(error);
+        alert('ошибка при получении статьи')
+      })
+
+    }
+  },[]);
 
   const options = React.useMemo(
     () => ({
@@ -136,7 +150,7 @@ export const AddPost = () => {
       />
       <div className={styles.buttons}>
         <Button onClick={onSubmit} size="large" variant="contained">
-          Опубликовать
+         {isEditing ? 'Редактировать' :'Опубликовать' } 
         </Button>
         <a href="/">
           <Button size="large">Отмена</Button>
